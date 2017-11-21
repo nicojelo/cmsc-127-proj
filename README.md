@@ -26,7 +26,7 @@ saving changes git add * git commit -m "message"
 
 finalizing changes to master branch git push origin master
 
---------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
 
 	CREATING THE DATABASE
 
@@ -40,7 +40,7 @@ finalizing changes to master branch git push origin master
 		lName VARCHAR(16),fName VARCHAR(32),
 		mName VARCHAR(16),
 		birthday date,
-		contactNum int(11),
+		contactNum varchar(11),
 		CONSTRAINT customer_customerid_pk PRIMARY KEY(customerId)
 	);
 
@@ -127,4 +127,55 @@ finalizing changes to master branch git push origin master
 	);
 
 	ORDER TABLE
-	create table order(orderId int(5) AUTO_INCREMENT,quantity int(2),price int(5),productId int(3),CONSTRAINT order_orderid_pk PRIMARY KEY(orderId),CONSTRAINT order_productid_fk FOREIGN KEY(productId) REFERENCES product(productId));
+	create TABLE transaction_order(
+		orderId int(5) AUTO_INCREMENT,
+		quantity int(2),
+		price int(5),
+		productId int(3),
+		CONSTRAINT order_orderid_pk PRIMARY KEY(orderId),
+		CONSTRAINT order_productid_fk FOREIGN KEY(productId)
+			REFERENCES product(productId)
+	);
+
+	TRANSACTION TABLE
+	create TABLE transaction(
+		transactionId int(4) AUTO_INCREMENT,
+		transac_date datetime,
+		total_price int(6),
+		type VARCHAR(3),
+		peso_spent int(6),
+		points_spent int(3),
+		stars_spent float(2),
+		orderId int(5),
+		CONSTRAINT transaction_transactionid_pk PRIMARY KEY(transactionId),
+		CONSTRAINT transaction_orderid_fk FOREIGN KEY(orderId)
+			REFERENCES transaction_order(orderId)
+	);
+
+	TRANSACTION TYPE TABLE
+	create TABLE transaction_type(
+		code varchar(3),
+		type varchar(16)
+	);
+
+	3) Initialize values to tables
+
+	Transaction Type
+		insert into transaction_type("PHP", "Philippine Peso");
+		insert into transaction_type("PTS", "Points");
+		insert into transaction_type("PSR", "Promo Stars");
+
+	4) Creating triggers: procedure
+
+	-- Insert Customer Procedure --
+	CREATE PROCEDURE insertCustomer(
+		a varchar(16),
+		b varchar(32),
+		c varchar(16),
+		d varchar(10),
+		e varchar(11)
+	) BEGIN
+	INSERT INTO customer(lName,fName,mName,birthday,contactNum) values(a,b,c,str_to_date(d,'%m/%d/%Y'),e);
+	END //
+
+
