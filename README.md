@@ -85,9 +85,9 @@ finalizing changes to master branch git push origin master
 
 	PRODUCT TABLE
 	create table product(
-		productId int(3),
+		productId int(4),
 		productName varchar(32),
-		priceValue int(4),
+		priceValue float(4),
 		CONSTRAINT product_productid_pk PRIMARY KEY(productId)
 	);
 
@@ -160,10 +160,21 @@ finalizing changes to master branch git push origin master
 
 	3) Initialize values to tables
 
+	Branch
+		insert into branch values (10, "SU Building");
+		insert into branch values (20, "Elbi Square");
+		insert into branch values (30, "Agapita St.");
+		insert into branch values (40, "Junction");
+
+	Product
+		insert into product values(9000,"Big Byte Hotdog",25);
+		insert into product values(9001,"Spicy Byte Hotdog",27);
+		insert into product values(9002,"Super Byte Hotdog",30);
+
 	Transaction Type
-		insert into transaction_type("PHP", "Philippine Peso");
-		insert into transaction_type("PTS", "Points");
-		insert into transaction_type("PSR", "Promo Stars");
+		insert into transaction_type values ("PHP", "Philippine Peso");
+		insert into transaction_type values ("PTS", "Points");
+		insert into transaction_type values ("PSR", "Promo Stars");
 
 	4) Creating triggers: procedure
 
