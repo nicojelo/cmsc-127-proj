@@ -1,0 +1,160 @@
+
+
+CREATE TABLE REWARDCARD(
+	cardID INT(9),
+	TotalPointsEarned INT(4),
+	Points INT(4),
+	TotalStarsEarned INT(4),
+	PromoStars INT(4),
+	CustomerID INT(9),
+
+	CONSTRAINT rewardcard_cardID_pk PRIMARY KEY(cardID),
+	CONSTRAINT rewardcard_customerID_fk FOREIGN KEY(CustomerID)
+	REFERENCES CUSTOMER(CustomerID)
+);
+
+
+CREATE TABLE POINTSCARD(
+	TotalPointsEarned INT(4),
+	Points INT(4),
+	UsedPoints INT(4),
+
+	CONSTRAINT pointscard_totalptsearnedANDpoints_pk1 PRIMARY KEY (TotalPointsEarned, Points)
+);
+
+CREATE TABLE STARSCARD(
+	TotalStarsEarned INT(4),
+	PromoStars INT(4),
+	UsedStars INT(4),
+
+	CONSTRAINT starscard_totalStarsEarned_pk1 PRIMARY KEY (TotalStarsEarned, PromoStars)
+);
+
+CREATE TABLE CUSTOMER(
+	CustomerID INT(9),
+	LastName VARCHAR(20),
+	FirstName VARCHAR(20),
+	MiddleName VARCHAR(20),
+	Birthday DATE,
+
+	CONSTRAINT customer_id_pk PRIMARY KEY (CustomerID)
+);
+
+CREATE TABLE BIRTHDAY_AGE(
+	Birthday DATE,
+	Age INT(3),
+	CONSTRAINT birthdayage_bday_pk PRIMARY KEY (Birthday)
+
+);
+
+CREATE TABLE TRANSACTION_CUSTOMER(
+	CustomerID INT(9),
+	TransID INT(9),
+	CONSTRAINT transactioncustomer_custtransid_pk PRIMARY KEY (CustomerID, TransID)
+);
+
+CREATE TABLE TRANSACTION(
+	TransID INT(9),
+	PointsEarned INT(4),
+	StarsEarned INT(4),
+	DateMade DATE,
+	KindOfPayment VARCHAR(25),
+	TotalPurchase REAL(8, 2),
+
+	CONSTRAINT transaction_transid_pk PRIMARY KEY (TransID)
+);
+
+CREATE TABLE ITEMS_BOUGHT(
+	TransID INT(9),
+	Item VARCHAR(20),
+
+	CONSTRAINT itemsbought_transid_pk PRIMARY KEY  (TransID)
+);
+
+CREATE TABLE BRANCH(
+	BranchID INT(9),
+	Location VARCHAR(25),
+	BranchName VARCHAR(25),
+
+	CONSTRAINT branch_branchid_pk PRIMARY KEY (BranchID)
+);
+
+
+CREATE TABLE TRANSACTION_BRANCH(
+	TransID INT(9),
+	BranchID INT(9),
+
+	CONSTRAINT transactionbranch_transbranchids_pk PRIMARY KEY (TransID, BranchID)
+);
+
+
+CREATE TABLE PRODUCT(
+	ProductID INT(9),
+	Name VARCHAR(25),
+	Price REAL(5,2),
+	StocksSold INT(4),
+	StocksAvailable INT(4),
+	BranchID INT(9),
+
+	CONSTRAINT product_productid_pk PRIMARY KEY(ProductID),
+	CONSTRAINT product_branchid_fk FOREIGN KEY(BranchID)
+	REFERENCES BRANCH(BranchID)
+);
+
+CREATE TABLE PRODUCT_PROMO(
+	ProductID INT(9),
+	PromoCode VARCHAR(25),
+
+	CONSTRAINT productpromo_productid_pk PRIMARY KEY(ProductID)
+);
+
+CREATE TABLE PROMO(
+	PromoCode VARCHAR(25),
+	StarsEarned INT(4),
+	StarsNeeded INT(4),
+
+	CONSTRAINT promo_promocode_pk PRIMARY KEY (PromoCode)
+);
+
+
+CREATE TABLE MONTHS_VALID(
+	PromoCode VARCHAR(25),
+	Month INT(2),
+
+	CONSTRAINT monthsvalid_promocode_pk PRIMARY KEY (PromoCode)
+);
+
+Features:
+
+1. 
+SELECT CUSTOMER.LastName, CUSTOMER.FirstName, CUSTOMER.MiddleName, REWARDCARD.TotalPointsEarned
+FROM CUSTOMER, REWARDCARD
+WHERE CUSTOMER.CustomerID = REWARDCARD.CustomerID;
+
+2.
+X
+
+3.
+SELECT C.LastName, C.FirstName, C.MiddleName, R.PromoStars
+FROM CUSTOMER, REWARDCARD
+WHERE CUSTOMER.CustomerID = REWARDCARD.CustomerID;
+
+4.
+
+SELECT C.Name, S.UsedStars
+FROM
+
+(SELECT C.Name, R.TotalStarsEarned, R.PromoStars
+FROM CUSTOMER C, REWARDCARD R
+WHERE C.CustomerID = R.CustomerID) Z, STARSCARD S
+
+WHERE Z.TotalStarsEarned = S.TotalStarsEarned and Z.PromoStars = S.PromoStars
+
+5. 
+X
+
+
+
+-----------------------------------------------
+
+1. 
