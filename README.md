@@ -76,4 +76,55 @@ finalizing changes to master branch git push origin master
 		CONSTRAINT rewardcard_cardId_uk UNIQUE(cardId)
 	);
 
+	BRANCH TABLE
+	create table branch(
+		branchId int(2),
+		location VARCHAR(32),
+		CONSTRAINT branch_branchId_pk PRIMARY KEY(branchId)
+	);
 
+	PRODUCT TABLE
+	create table product(
+		productId int(3),
+		productName varchar(32),
+		priceValue int(4),
+		CONSTRAINT product_productid_pk PRIMARY KEY(productId)
+	);
+
+	PROMO TABLE
+	create table promo(
+		promoId int(3),
+		promoStart date,
+		promoEnd date,
+		branchId int(2),
+		CONSTRAINT promo_promoid_pk PRIMARY KEY(promoId),
+		CONSTRAINT promo_branchid_fk FOREIGN KEY(branchId)
+			REFERENCES branch(branchId)
+	);
+
+	PRODUCTS IN PROMO TABLE
+	create table promo_product(
+		promoId int(3),
+		productId int(3),
+		CONSTRAINT promoproduct_promoid_fk FOREIGN KEY(promoId)
+			REFERENCES promo(promoId),
+		CONSTRAINT promoproduct_productid_fk FOREIGN KEY(productId)
+			REFERENCES product(productId)
+	);
+
+	STOCKS TABLE
+	create table stocks (
+		stocksId int(3),
+		stocksAvailable int(3),
+		stocksSold int(3),
+		productId int(3),
+		branchId int(2),
+		CONSTRAINT stocks_stocksid_pk PRIMARY KEY(stocksId),
+		CONSTRAINT stocks_productid_fk FOREIGN KEY(productId)
+			REFERENCES product(productId),
+		CONSTRAINT stocks_branchid_fk FOREIGN KEY(branchId)
+			REFERENCES branch(branchId)
+	);
+
+	ORDER TABLE
+	create table order(orderId int(5) AUTO_INCREMENT,quantity int(2),price int(5),productId int(3),CONSTRAINT order_orderid_pk PRIMARY KEY(orderId),CONSTRAINT order_productid_fk FOREIGN KEY(productId) REFERENCES product(productId));
