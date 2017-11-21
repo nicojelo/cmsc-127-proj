@@ -1,0 +1,30 @@
+{TotalPtsEarned, Points} -> {UsedPts}
+{TotalStarsEarned, PromoStars} -> {UsedStars}
+{CardID} -> {TotalPtsEarned, Points, TotalStarsEarned, PromoStars}
+
+REWARDCARD(cardID, TotalPtsEarned, Points, TotalStarsEarned, PromoStars, customerID)
+
+POINTSCARD(TotalPtsEarned, Points, UsedPoints)
+STARSCARD(TotalStarsEarned, PromoStars, UsedStars)
+
+-------------------------------------
+
+{CustomerID} -> {L, F, M, Birthday}
+
+CUSTOMER(CustomerID, LastN, FirstN, MiddleN, Birthday)
+BIRTH_AGE(Birthday, Age)
+
+-------------------------------------
+
+TRANSACTION_CUSTOMER(CustomerID, TransID)
+TRANSACTION(TransID, PointsEarned, StarsEarned, DateMade, KindOfPayment, TotalPurchase)
+ITEMS_BOUGHT(TransID, Item)
+BRANCH(BranchId, Location, BranchName)
+TRANSACTION_BRANCH(TransID, BranchID)
+
+--------------------------------------
+
+PRODUCT(ProductID, Name, Price, StocksSold, StocksAvailable, BranchID)
+PRODUCT_PROMO(ProductID, PromoCode)
+PROMO(PromoCode, StarsNeeded, StarsEarned)
+MONTHS_VALID(PromoCode, Month)
