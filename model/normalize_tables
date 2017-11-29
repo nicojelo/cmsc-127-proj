@@ -1,30 +1,53 @@
-{TotalPtsEarned, Points} -> {UsedPts}
-{TotalStarsEarned, PromoStars} -> {UsedStars}
-{CardID} -> {TotalPtsEarned, Points, TotalStarsEarned, PromoStars}
 
-REWARDCARD(cardID, TotalPtsEarned, Points, TotalStarsEarned, PromoStars, customerID)
 
-POINTSCARD(TotalPtsEarned, Points, UsedPoints)
-STARSCARD(TotalStarsEarned, PromoStars, UsedStars)
+REWARDCARD(cardID, customerID)
+
+REWARD_POINTS(cardID, TotalPtsEarned, ValidPoints, UsedPoints)
+
+REWARD_STARS(cardID, ProductId, Date, ValidPromoStars, UsedStars);
+
+
 
 -------------------------------------
 
-{CustomerID} -> {L, F, M, Birthday}
-
-CUSTOMER(CustomerID, LastN, FirstN, MiddleN, Birthday)
-BIRTH_AGE(Birthday, Age)
+CUSTOMER(CustomerID, LastN, FirstN, MiddleN)
 
 -------------------------------------
 
 TRANSACTION_CUSTOMER(CustomerID, TransID)
 TRANSACTION(TransID, PointsEarned, StarsEarned, DateMade, KindOfPayment, TotalPurchase)
 ITEMS_BOUGHT(TransID, Item)
-BRANCH(BranchId, Location, BranchName)
+BRANCH(BranchId, Location)
 TRANSACTION_BRANCH(TransID, BranchID)
 
 --------------------------------------
 
-PRODUCT(ProductID, Name, Price, StocksSold, StocksAvailable, BranchID)
+PRODUCT(ProductID, Name, Price, StocksSold, StocksAvailable, starsNeeded BranchID)
+
 PRODUCT_PROMO(ProductID, PromoCode)
-PROMO(PromoCode, StarsNeeded, StarsEarned)
+
+PROMO(PromoCode, DateStart, DateEnd)
+
 MONTHS_VALID(PromoCode, Month)
+
+
+
+
+
+
+
+
+
+
+
+
+when customer uses points
+	deduct valid
+	update used
+when customer earns points
+	update total
+	update valid
+
+	{TotalPtsEarned, Points} -> {UsedPts}
+{TotalStarsEarned, PromoStars} -> {UsedStars}
+{CardID} -> {TotalPtsEarned, Points, TotalStarsEarned, PromoStars}

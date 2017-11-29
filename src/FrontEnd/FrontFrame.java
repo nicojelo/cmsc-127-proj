@@ -5,11 +5,15 @@
  */
 package FrontEnd;
 
-import BackEnd.MariaDB;
-import java.sql.SQLException;
+import BackEnd.*;
+import static BackEnd.SQLExceptionCheck.isAuthenticationError;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,6 +26,8 @@ public class FrontFrame extends javax.swing.JFrame {
      */
     public FrontFrame() {
         initComponents();
+        this.centerize();
+        
     }
 
     /**
@@ -33,7 +39,7 @@ public class FrontFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        loginPane = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         usernameField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -59,38 +65,38 @@ public class FrontFrame extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout loginPaneLayout = new javax.swing.GroupLayout(loginPane);
+        loginPane.setLayout(loginPaneLayout);
+        loginPaneLayout.setHorizontalGroup(
+            loginPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginPaneLayout.createSequentialGroup()
+                .addGroup(loginPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(loginPaneLayout.createSequentialGroup()
                         .addContainerGap(15, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addGap(33, 33, 33))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(loginPaneLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(loginPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(loginButton)
                     .addComponent(jLabel1)
                     .addComponent(usernameField)
                     .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
                 .addGap(38, 38, 38))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        loginPaneLayout.setVerticalGroup(
+            loginPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(loginPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(loginPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(loginPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
@@ -104,14 +110,14 @@ public class FrontFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loginPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(loginPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -125,10 +131,14 @@ public class FrontFrame extends javax.swing.JFrame {
 
         MariaDB maria;
         try {
-            maria = new MariaDB(username, password);
+            maria = new MariaDB(username, password, this);
         } catch (SQLException ex) {
-            Logger.getLogger(FrontFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            System.out.println("check: " + isAuthenticationError(ex));
+            if(isAuthenticationError(ex)){
+                JOptionPane.showMessageDialog(this, "Invalid credentials");
+            }
+            //Logger.getLogger(FrontFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }//GEN-LAST:event_loginButtonActionPerformed
 
     /**
@@ -161,13 +171,22 @@ public class FrontFrame extends javax.swing.JFrame {
         /* Create and display the form */
         
     }
+    
+    private void centerize(){
+        Toolkit tool = Toolkit.getDefaultToolkit();
+        Dimension dim = new Dimension(tool.getScreenSize());
+        int height = (int) dim.getHeight();
+        int width = (int) dim.getWidth();
+        //setSize(width, height);
+        setLocation(width / 2 - getWidth() / 2, height /2 - getHeight() / 2);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JButton loginButton;
+    private javax.swing.JPanel loginPane;
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
